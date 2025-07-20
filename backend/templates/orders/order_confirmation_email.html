@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #007bff;
+            margin: 0;
+            font-size: 28px;
+        }
+        .order-details {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .order-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .item {
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 0;
+        }
+        .item:last-child {
+            border-bottom: none;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 Order Confirmed!</h1>
+            <p>Thank you for your purchase, {{ user.first_name|default:user.username }}!</p>
+        </div>
+        
+        <div class="order-details">
+            <div class="order-number">Order #{{ order.id }}</div>
+            <p><strong>Order Date:</strong> {{ order.created_at|date:"F j, Y" }}</p>
+            <p><strong>Status:</strong> <span style="color: #28a745;">{{ order.status|title }}</span></p>
+            
+            {% if order.shipping_address %}
+            <p><strong>Shipping Address:</strong><br>
+            {{ order.shipping_address|linebreaks }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="total-amount">
+            Total: ${{ order.total_amount }}
+        </div>
+        
+        <h3>Order Items:</h3>
+        {% for item in order.order_items.all %}
+        <div class="item">
+            <strong>{{ item.product.name }}</strong><br>
+            Quantity: {{ item.quantity }} × ${{ item.unit_price }} = ${{ item.total_price }}
+        </div>
+        {% endfor %}
+        
+        <div class="footer">
+            <p>If you have any questions about your order, please contact our support team.</p>
+            <p>Thank you for choosing our store!</p>
+        </div>
+    </div>
+</body>
+</html> 
